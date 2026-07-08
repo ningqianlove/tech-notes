@@ -56,11 +56,21 @@ sudo snap remove snap-store    #sanp图形商店，可能本来就没有
 
 1. 左侧Dock栏自动隐藏
 
-   settings-appliance-dock:勾选auto-hide the dock选项
+   settings-apperance-dock:勾选auto-hide the dock选项
 
-2. 桌面背景图更换
+2. 取消dock大小扩展
+
+   settings-apperance-dock: 取消Panel mode
+
+3. 桌面背景图更换
 
    settings-background
+
+4. 移除桌面的Home图标
+
+   settings-apperence-desktop icons:取消show personal folder
+
+   
 
 ## bashrc配置
 
@@ -244,3 +254,20 @@ set number
    - settings-region & language-点击manage installed languages更新
    - 桌面右上角点击En—选择chinese(pinyin)
    - 按shift切换中英文输入
+
+2. 如果系统桌面右上角没有输入法图标，原因如下：
+
+   右上角的键盘图标只有在添加了多个输入源（或非英文输入法）时才会显示。
+
+   ```bash
+   gsettings get org.gnome.desktop.input-sources sources
+   ```
+
+   如果输出类似于 [('xkb', 'us')]（只有一个英文布局），图标不会显示。需要添加其他输入源:
+
+   ```bash
+   # 例如添加中文拼音输入
+   gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'libpinyin')]"
+   ```
+
+   
