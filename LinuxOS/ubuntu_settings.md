@@ -56,21 +56,23 @@ sudo snap remove snap-store    #sanp图形商店，可能本来就没有
 
 1. 左侧Dock栏自动隐藏
 
-   settings-apperance-dock:勾选auto-hide the dock选项
+settings-apperance-dock:勾选auto-hide the dock选项
 
 2. 取消dock大小扩展
 
-   settings-apperance-dock: 取消Panel mode
+settings-apperance-dock: 取消Panel mode
 
 3. 桌面背景图更换
 
-   settings-background
+settings-background
 
 4. 移除桌面的Home图标
 
-   settings-apperence-desktop icons:取消show personal folder
+settings-apperence-desktop icons:取消show personal folder
 
-   
+5. 终端背景色
+
+terminal右键——perferences——unnamed——colors，取消勾选Use colors from system theme,build-in scheme选择custom，Text保持黑色不变，background改为#C7EDCC
 
 ## bashrc配置
 
@@ -92,8 +94,6 @@ sudo snap remove snap-store    #sanp图形商店，可能本来就没有
 sudo apt update
 sudo apt upgrade
 ```
-
-
 
 1. 安装vim-gtk3
 
@@ -137,97 +137,114 @@ sudo apt upgrade
    pip3 --version
    ```
 
-4. 安装并配置claude code
-
-   4.1 安装node.js
-
-   ```bash
-   # 1.添加node20源 
-   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - 
-   sudo apt install nodejs -y
-   ```
-
-   验证安装
-
-   ```bash
-   node -v
-   npm -v
-   ```
-
-   配置NPM国内镜像
-
-   ```bash
-   npm config set registry https://registry.npmmirror.com
-   npm config get registry
-   ```
-
-   如果输出 `https://registry.npmmirror.com/`，说明镜像源切换成功了
-
-   4.2 安装claude code
-
-   ```bash
-   sudo npm install -g @anthropic-ai/claude-code
-   #更新npm版本
-   sudo npm install -g npm@11.17.0
-   ```
-
-   验证安装
-
-   ```bash
-   claude --version
-   ```
-
-   4.3 配置环境变量以接入deekseek
-
-   将以下配置添加到.bashrc中
-
-   ```bash
-   # 将 <你的 DeepSeek API Key> 替换为真实的 API Key
-   export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
-   export ANTHROPIC_AUTH_TOKEN="<你的 DeepSeek API Key>"
-   export ANTHROPIC_MODEL="deepseek-v4-pro[1m]"
-   export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-v4-pro[1m]"
-   export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-v4-pro[1m]"
-   export ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-v4-flash"
-   export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-v4-flash"
-   export CLAUDE_CODE_EFFORT_LEVEL="max"
-   ```
-
-   执行
-
-   ```bash
-   source ~/.bashrc
-   ```
-
-   4.4 启动claude
-
-   直接输入claude,如果看到 Claude Code 的欢迎界面和提示符，说明配置已经成功
-
-   4.5 问题修复（可选）
-
-   如果启动claude后，**提示：Auto-update failed: no write permission to npm prefix ，按如下操作：**
-
-   ```bash
-   # 创建用户级别的 npm 全局目录
-   mkdir -p ~/.npm-global
    
-   # 配置 npm 使用该目录
-   npm config set prefix '~/.npm-global'
-   
-   # 将该目录的 bin 子目录添加到 PATH 环境变量
-   
-   # 对于 bash 用户：
-   echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
-   source ~/.bashrc
-   ```
 
-   完成上述配置后，重新安装 Claude Code 即可。
+## 安装并配置claude code
 
-   ```bash
-   npm install -g @anthropic-ai/claude-code
-   ```
+**安装node.js**
 
-   
+```bash
+# 1.添加node20源 
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - 
+sudo apt install nodejs -y
+```
+
+**验证安装**
+
+```bash
+node -v
+npm -v
+```
+
+**配置NPM国内镜像**
+
+```bash
+npm config set registry https://registry.npmmirror.com
+npm config get registry
+```
+
+如果输出 `https://registry.npmmirror.com/`，说明镜像源切换成功了
+
+**安装claude code**
+
+```bash
+sudo npm install -g @anthropic-ai/claude-code
+#更新npm版本
+sudo npm install -g npm@11.17.0
+```
+
+**验证安装**
+
+```bash
+claude --version
+```
+
+**配置环境变量以接入deekseek**
+
+**将以下配置添加到.bashrc中:**
+
+```bash
+# 将 <你的 DeepSeek API Key> 替换为真实的 API Key
+export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
+export ANTHROPIC_AUTH_TOKEN="<你的 DeepSeek API Key>"
+export ANTHROPIC_MODEL="deepseek-v4-pro[1m]"
+export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-v4-pro[1m]"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-v4-pro[1m]"
+export ANTHROPIC_DEFAULT_HAIKU_MODEL="deepseek-v4-flash"
+export CLAUDE_CODE_SUBAGENT_MODEL="deepseek-v4-flash"
+export CLAUDE_CODE_EFFORT_LEVEL="max"
+```
+
+**执行**
+
+```bash
+source ~/.bashrc
+```
+
+**启动claude**
+
+直接输入claude,如果看到 Claude Code 的欢迎界面和提示符，说明配置已经成功
+
+**问题修复（可选）**
+
+如果启动claude后，**提示：Auto-update failed: no write permission to npm prefix ，按如下操作：**
+
+```bash
+# 创建用户级别的 npm 全局目录
+mkdir -p ~/.npm-global
+
+# 配置 npm 使用该目录
+npm config set prefix '~/.npm-global'
+
+# 将该目录的 bin 子目录添加到 PATH 环境变量
+
+# 对于 bash 用户：
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**完成上述配置后，重新安装 Claude Code 即可。**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+如果有如下输出：
+
+```
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   @anthropic-ai/claude-code@2.1.197 (postinstall: node install.cjs)
+npm warn allow-scripts
+npm warn allow-scripts Run `npm install -g --allow-scripts=@anthropic-ai/claude-code` to allow these scripts once, or `npm config set allow-scripts=@anthropic-ai/claude-code --location=user` to allow them for all global installs.
+```
+
+执行：
+
+```shell
+npm config set allow-scripts=@anthropic-ai/claude-code --location=user
+```
+
+
 
 ## vimrc配置
 
@@ -246,6 +263,7 @@ set mouse=a
 set mousemodel=popup
 colorscheme desert
 set number
+set hlsearch
 ```
 
 ## 中文输入法支持

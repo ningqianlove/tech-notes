@@ -63,4 +63,58 @@ cd util/toolchain-builder/src/gcc && git apply ../../gcc-cva6-tune.patch
    pip3 install -r verif/sim/dv/requirements.txt
    ```
 
+   > [!NOTE]
+   >
+   > 有些安装包可能由于没有sudo权限安装到了~/.local/bin下，需要把~/.local/bin写入~/.bashrc中
+   >
+   > ```shell
+   > export PATH="$HOME/.local/bin:$PATH"
+   > ```
+   >
+   > 
+
+7. 安装spike和verilator
+
+   ```shell
+   export DV_SIMULATORS=veri-testharness,spike
+   bash verif/regress/smoke-gen_tests.sh
+   ```
+
+   默认安装到cva6/tools目录下
+
+8. 运行仿真
+
+   hello_world仿真
+
+   **配置好RISCV环境变量，指向工具链安装位置**
+
+   ```bash
+   # Make sure to source this script from the root directory 项目根目录（即 cva6/ 目录）
+   # to correctly set the environment variables related to the tools
+   source verif/sim/setup-env.sh
    
+   # Set the NUM_JOBS variable to increase the number of parallel make jobs
+   # export NUM_JOBS=
+   
+   export DV_SIMULATORS=veri-testharness
+   
+   cd ./verif/sim
+   
+   python3 cva6.py --target cv32a60x --iss=$DV_SIMULATORS --iss_yaml=cva6.yaml --c_tests ../tests/custom/hello_world/hello_world.c --linker=../../config/gen_from_riscv_config/linker/link.ld --gcc_opts="-static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g ../tests/custom/common/syscalls.c ../tests/custom/common/crt.S -lgcc -I../tests/custom/env -I../tests/custom/common"
+   ```
+
+9. vcs-uvm + verdi
+
+   ```shell
+   export DV_SIMULATORS=vcs-uvm
+   export VERDI=1
+   python3 cva6.py --target cv32a60x --iss=$DV_SIMULATORS --iss_yaml=cva6.yaml --c_tests ../tests/custom/hello_world/hello_world.c --linker=../../config/gen_from_riscv_config/linker/link.ld --gcc_opts="-static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles -g ../tests/custom/common/syscalls.c ../tests/custom/common/crt.S -lgcc -I../tests/custom/env -I../tests/custom/common"
+   
+   ```
+
+   **TODO**
+
+```shell
+python3 cva6.py --target "$DV_TARGET" --iss="$DV_SIMULATORS" --iss_yaml=cva6.yaml --iss_timeout="$TIMEOUT_WALLCLOCK" --c_tests ../tests/custom/hello_world/hello_world.c --gcc_opts="$CC_OPTS" --issrun_opts="+time_out=$TIMEOUT_TICKS"
+```
+
