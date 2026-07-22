@@ -4,6 +4,76 @@
 
 1. ubuntu操作系统主要有两类：desktop和server。目前由于使用的是阿里的无影云电脑，它默认选择安装的镜像只有ubuntu22.04，是桌面版的linux，所以以下的描述会基于该版本和前提进行展开。
 
+## 更换国内镜像（可选）
+
+如果下载时感觉很慢，可以选择更换国内镜像
+
+1. 备份源列表
+
+```bash
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+```
+
+2. 编辑源列表文件
+
+```bash
+sudo nano /etc/apt/sources.list
+```
+
+3. 替换文件内容
+
+阿里云镜像站（ubuntu 22.04）
+
+```
+deb http://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse
+```
+
+4 在nano编辑器中，按Ctrl + O保存，按Ctrl + X退出
+
+## Windows 中复制的内容无法在 VMware Linux 虚拟机中粘贴
+
+Windows 中复制的内容无法在 VMware Linux 虚拟机中粘贴，这通常是因为 **VMware Tools**（或 Linux 下的 `open-vm-tools`）未正确安装、配置或运行
+
+(一)首先，确保虚拟机本身允许共享剪贴板。
+
+1. **关闭**你的 Linux 虚拟机。
+2. 在 VMware 主界面，右键点击该虚拟机，选择 **“设置”**。
+3. 切换到 **“选项”** 标签页，找到并点击 **“客户机隔离”**。
+4. 在右侧，**勾选** “**启用复制和粘贴**”。如果下拉菜单可选，建议选择“**双向**”。
+5. 点击“确定”保存，然后**重新启动**虚拟机
+
+（二）在Linux虚拟机中安装或重装增强工具
+
+这是最关键的一步。**强烈推荐安装Linux发行版官方仓库中的 `open-vm-tools`**，这是VMware官方推荐的方式，兼容性更好
+
+```bash
+sudo apt update
+sudo apt install open-vm-tools open-vm-tools-desktop
+```
+
+安装完成后，**重启**你的Linux虚拟机
+
+```bash
+sudo reboot
+```
+
+（三）检查关键服务是否运行
+
+```bash
+systemctl status vmtoolsd
+```
+
+如果服务未运行，可以用下面的命令启动：
+
+```bash
+sudo systemctl start vmtoolsd
+```
+
+
+
 ## 预安装软件删繁就简
 
 > [!IMPORTANT]
@@ -291,5 +361,3 @@ set hlsearch
    # 例如添加中文拼音输入
    gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'libpinyin')]"
    ```
-
-   
