@@ -57,3 +57,40 @@ git config --global core.safecrlf warn
 2. Text标签
    - Locale: zh_CN
    - Character set : UTF-8
+
+
+
+## 切换到SSH协议访问github
+
+为了解决windows中的git bash访问github慢的问题，**彻底抛弃了 HTTPS 协议，完全切换到 SSH 协议**来访问 GitHub
+
+1. 生成SSH密钥对
+
+   ```bash
+   ssh-keygen -t ed25519 -C "your name@xxx.com"
+   ```
+
+2. 把公钥注册到github服务器
+
+   ```bash
+   #复制输出的内容，它会输出一串以 ssh-ed25519 开头的字符。选中并复制这整段内容（从 ssh-ed25519 复制到最后的 gmail.com）
+   cat ~/.ssh/id_ed25519.pub 
+   ```
+
+   **添加到 GitHub 网站**
+   打开浏览器登录 GitHub，点击右上角头像 → **Settings** → 左侧菜单 **SSH and GPG keys** → 绿色的 **New SSH Key**。Title 随便填（比如 `My Windows`），Key 粘贴刚才复制的内容，点 **Add SSH key**
+
+3. **改了本地仓库的远程地址（项目配置变更）**
+
+   ```bash
+   git remote set-url origin git@github.com:ningqianlove/tech-notes.git
+   ```
+
+4. 测试连通性
+
+   ```bash
+   # 测试 SSH 连通性（首次会问是否信任，输入 yes 回车）
+   ssh -T git@github.com
+   ```
+
+   看到 `Hi ningqianlove! You've successfully authenticated...` 就成功了。
