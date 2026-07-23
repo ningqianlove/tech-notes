@@ -26,10 +26,10 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 输入 **Y** 回车
 
-2\. 官方一键安装
+2\. winget 包管理器安装
 
 ```powershell
-irm https://claude.ai/install.ps1 | iex
+winget install Anthropic.ClaudeCode
 ```
 
 3\. 重启终端，验证是否安装成功
