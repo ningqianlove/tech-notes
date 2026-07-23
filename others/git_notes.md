@@ -94,3 +94,5 @@ git config --global core.safecrlf warn
    ```
 
    看到 `Hi ningqianlove! You've successfully authenticated...` 就成功了。
+   
+5. 如果以后新建别的仓库，记得在 `clone` 或 `remote add` 时，**复制地址时一定要选 SSH 标签下的地址**（即以 `git@github.com:` 开头的那个），而不是 HTTPS 的地址，就能永远避开今天遇到的这个坑了
