@@ -260,7 +260,7 @@ claude --version
 ```bash
 # 将 <你的 DeepSeek API Key> 替换为真实的 API Key
 export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
-export ANTHROPIC_AUTH_TOKEN="<你的 DeepSeek API Key>"
+export ANTHROPIC_AUTH_TOKEN="sk-72383bb89fa441f7a426e9a79bc08b9b"
 export ANTHROPIC_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-v4-pro[1m]"
@@ -289,7 +289,6 @@ mkdir -p ~/.npm-global
 
 # 配置 npm 使用该目录
 npm config set prefix '~/.npm-global'
-
 # 将该目录的 bin 子目录添加到 PATH 环境变量
 
 # 对于 bash 用户：
