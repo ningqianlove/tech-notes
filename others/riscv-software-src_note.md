@@ -271,3 +271,83 @@ __attribute__((visibility("hidden"))) void aa(void)
 
 1. 符号依旧是**全局符号**，链接器可以匹配并覆盖 weak 符号；
 2. 符号对外动态链接不可见，不会暴露给其他模块调用，兼顾覆盖 + 隔离
+
+# 特权级间切换示例代码
+
+M→S→M
+
+```c
+// M 模式异常处理函数（由汇编入口调用）
+void m_trap_handler_c(void) {
+    unsigned long cause = csr_read(mcause);
+    
+    // 判断是否为来自 S 模式的 ecall（cause = 9）
+    if (cause == 9) {
+        // 恢复返回地址到 mepc
+        csr_write(mepc, (unsigned long)return_pc);
+
+        // 设置 mstatus 使 mret 返回后进入 M 模式
+        unsigned long mstatus = csr_read(mstatus);
+        mstatus &= ~(3UL << 11);   // 清除 MPP
+        mstatus |= (3UL << 11);    // MPP = 11 (M模式)
+        csr_write(mstatus, mstatus);
+
+        // 执行 mret，跳转到 return_pc（即 after_aa）
+        __asm__ volatile ("mret");
+    } else {
+        // 其他异常处理（可扩展）
+        // 此处简单死循环
+        while(1);
+    }
+}
+// 从 S 模式返回后继续执行的函数
+void after_switch(void) {
+    // 这里放原来 switch_to_s_mode 位置后面的代码
+    // 例如打印信息、继续其他任务等
+    // 测试时可以写一个死循环
+    while(1) {
+        // 做一些工作
+    }
+}
+
+// M 模式启动入口（类似于 _start）
+void start_m_mode(void) {
+    // 1. 设置 mtvec 指向汇编入口
+    extern void trap_entry(void);   // 在 trap_entry.S 中定义
+    csr_write(mtvec, (unsigned long)trap_entry);
+
+    ...
+    ...
+        
+    // 2. 保存返回地址（aa 之后的位置）
+    return_pc = (void*)after_switch;
+
+    // 3. 切换到 S 模式
+    switch_to_s_mode();
+
+    // 4. 理论上不会执行到这里，因为 mret 会跳转
+    //工业级代码（如 FreeRTOS、OpenSBI）的标准写法
+    while(1);
+}
+```
+
+trap_entry.S
+
+```n
+.section .text
+.globl trap_entry
+trap_entry:
+    # 保存可能被C函数修改的寄存器（根据需要可扩展）
+    # 例如保存 ra, t0-t6 等，此处仅保存 ra 示例
+    addi sp, sp, -4
+    sw ra, 0(sp)
+
+    # 调用 C 处理函数
+    call m_trap_handler_c
+
+    # 如果处理函数没有执行 mret（例如其他异常），则恢复并返回
+    lw ra, 0(sp)
+    addi sp, sp, 4
+    mret
+```
+

@@ -14,6 +14,15 @@ git config --global i18n.commitencoding utf-8
 
 2. 执行完关闭git bash重新打开，再输入git status
 
+## gitk(gui)中文乱码
+
+```bash
+# gitk / git-gui 图形界面编码（最关键）
+git config --global gui.encoding utf-8
+```
+
+
+
 ## 换行符冲突（CRLF自动处理）
 
 执行以下命令：
