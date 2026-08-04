@@ -260,7 +260,7 @@ claude --version
 ```bash
 # 将 <你的 DeepSeek API Key> 替换为真实的 API Key
 export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
-export ANTHROPIC_AUTH_TOKEN="sk-72383bb89fa441f7a426e9a79bc08b9b"
+export ANTHROPIC_AUTH_TOKEN="xxxxxxx"
 export ANTHROPIC_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-v4-pro[1m]"
